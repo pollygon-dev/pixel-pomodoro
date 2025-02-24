@@ -1,0 +1,19 @@
+{
+    "name": "Pixel Pomodoro Timer",
+    "short_name": "Pomodoro",
+    "description": "A pixel art styled pomodoro timer",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#B8FF9F",
+    "icons": [
+        {
+            "src": "icons/icon.png",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/icon.png",
+            "type": "image/png"
+        }
+    ]
+}

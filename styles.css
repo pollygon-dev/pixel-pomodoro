@@ -1,0 +1,842 @@
+@font-face {
+    font-family: 'Press Start 2P';
+    src: url('https://fonts.gstatic.com/s/pressstart2p/v14/e3t4euO8T-267oIAQAu6jDQyK3nVivM.woff2') format('woff2');
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    image-rendering: pixelated;
+}
+
+body {
+    min-height: 100vh;
+    background: white;
+    font-family: 'Press Start 2P', monospace;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+}
+
+/* Add these to your existing CSS */
+.title {
+    -webkit-app-region: drag;
+    cursor: move;
+}
+
+.border-pattern {
+    -webkit-app-region: drag;
+}
+
+/* Make sure controls aren't draggable */
+.window-controls,
+.mode-selector,
+.timer-controls,
+.task-input,
+.task-list {
+    -webkit-app-region: no-drag;
+}
+
+.window-controls {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    display: flex;
+    gap: 8px;
+    z-index: 1000;
+    -webkit-app-region: no-drag;
+}
+
+.window-controls button {
+    width: 24px;
+    height: 24px;
+    border-radius: 12px;
+    border: 2px solid #000;
+    background: #fff;
+    color: #000;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+}
+
+.window-controls .minimize-btn {
+    padding-bottom: 4px;
+}
+
+.window-controls button:hover {
+    background: #eee;
+}
+
+.window-controls .close-btn:hover {
+    background: #ff4444;
+    color: white;
+    border-color: #ff4444;
+}
+
+/* Make the title bar draggable */
+.title {
+    -webkit-app-region: drag;
+    cursor: move;
+    user-select: none;
+}
+
+.border-pattern {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 20px;
+    background: repeating-linear-gradient(
+        to right,
+        #4FA7FF 0px,
+        #4FA7FF 40px,
+        transparent 40px,
+        transparent 80px
+    );
+    z-index: 100;
+}
+
+.border-pattern.bottom {
+    top: auto;
+    bottom: 0;
+}
+
+.container {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    align-items: stretch;
+    margin: 2rem 0;
+    max-width: 1200px;
+    width: 100%;
+}
+
+.panel {
+    position: relative;
+    padding: 2rem;
+    border-radius: 24px;
+    border: 4px solid #000;
+    flex: 1;
+    max-width: 500px;
+}
+
+.timer-panel {
+    background: linear-gradient(180deg, #B8FF9F 0%, #ffffff 100%);
+}
+
+.task-panel {
+    background: linear-gradient(180deg, #FFB8E8 0%, #ffffff 100%);
+}
+
+.panel-label {
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #fff;
+    padding: 5px 20px;
+    border: 4px solid #000;
+    border-radius: 20px;
+    font-size: 16px;
+    z-index: 1;
+    white-space: nowrap;
+}
+
+.timer-panel .panel-label {
+    background: linear-gradient(145deg, #FFB8E8 0%, #FF9FD4 100%);
+}
+
+.task-panel .panel-label {
+    background: linear-gradient(145deg, #B8FF9F 0%, #9FE889 100%);
+}
+
+.title {
+    font-size: 24px;
+    color: #000;
+    text-transform: uppercase;
+    margin: 2rem 0;
+    letter-spacing: 2px;
+}
+
+.timer-circle {
+    width: 200px;
+    height: 200px;
+    margin: 2rem auto;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.timer-circle .time {
+    font-size: 32px;
+    z-index: 2;
+    color: #000;
+}
+
+.progress-ring {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.progress-ring circle {
+    fill: none;
+    stroke-width: 8;
+}
+
+.progress-ring .background {
+    stroke: rgba(0, 0, 0, 0.1);
+}
+
+.progress-ring .progress {
+    stroke: #B8FF9F;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.3s;
+}
+
+.timer-controls {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.timer-controls button {
+    padding: 10px 20px;
+    border: 4px solid #000;
+    border-radius: 12px;
+    background: #fff;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 14px;
+    cursor: pointer;
+    min-width: 100px;
+}
+
+.timer-controls button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.timer-controls button:not(:disabled):hover {
+    transform: translateY(-2px);
+}
+
+.timer-controls button:not(:disabled):active {
+    transform: translateY(1px);
+}
+
+.mode-selector {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.mode-selector button {
+    background: transparent;
+    border: 3px solid #000;
+    padding: 8px 16px;
+    border-radius: 12px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.mode-selector button.active {
+    background: #B8FF9F;
+}
+
+.task-input {
+    display: flex;
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.task-input input {
+    flex: 1;
+    padding: 10px;
+    border: 3px solid #000;
+    border-radius: 12px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 12px;
+}
+
+.task-input button {
+    padding: 10px 20px;
+    border: 3px solid #000;
+    border-radius: 12px;
+    background: #B8FF9F;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.task-list {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.task-item {
+    background: #fff;
+    border: 3px solid #000;
+    border-radius: 12px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+}
+
+.task-item.completed {
+    opacity: 0.7;
+    text-decoration: line-through;
+}
+
+.timer-status {
+    text-align: center;
+    font-size: 12px;
+    margin-top: 1rem;
+}
+
+.session-count {
+    text-align: center;
+    font-size: 12px;
+    margin-top: 0.5rem;
+    color: #666;
+}
+
+.settings-icon {
+    position: fixed;
+    top: 15px;
+    right: 80px;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    z-index: 1000;
+    -webkit-app-region: no-drag;
+    border: 2px solid #000;
+    border-radius: 12px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    padding-top: 1px;
+}
+
+.settings-icon:hover {
+    background: #eee;
+}
+
+.settings-panel {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    border: 4px solid #000;
+    border-radius: 12px;
+    padding: 20px;
+    z-index: 2000;
+    display: none;
+    width: 400px;
+    max-height: 80vh;
+    overflow-y: auto;
+    background: linear-gradient(145deg, #ffffff 0%, #f0f0f0 100%);
+}
+
+.settings-panel.visible {
+    display: block;
+}
+
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.panel-header h2 {
+    font-size: 16px;
+    margin: 0;
+}
+
+.close-settings {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0 5px;
+    font-family: 'Press Start 2P', monospace;
+}
+
+.settings-section {
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 2px solid #000;
+    border-radius: 8px;
+}
+
+.settings-section h3 {
+    font-size: 14px;
+    margin: 0 0 15px 0;
+}
+
+.setting-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 10px;
+}
+
+.setting-item label {
+    font-size: 12px;
+}
+
+.setting-item input[type="number"] {
+    width: 80px;
+    padding: 5px;
+    border: 2px solid #000;
+    border-radius: 4px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 12px;
+}
+
+.save-settings {
+    width: 100%;
+    padding: 10px;
+    background: #B8FF9F;
+    border: 3px solid #000;
+    border-radius: 8px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 12px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.save-settings:hover {
+    background: #9FE889;
+}
+
+.snooze-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 3000;
+    align-items: center;
+    justify-content: center;
+}
+
+.snooze-modal.visible {
+    display: flex;
+}
+
+.modal-content {
+    background: white;
+    padding: 2rem;
+    border: 4px solid #000;
+    border-radius: 12px;
+    text-align: center;
+    min-width: 300px;
+}
+
+.modal-content h2 {
+    font-size: 16px;
+    margin-bottom: 1.5rem;
+}
+
+.volume-control {
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.volume-control label {
+    font-size: 12px;
+}
+
+.volume-control input[type="range"] {
+    width: 200px;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.modal-buttons button {
+    padding: 10px 20px;
+    border: 3px solid #000;
+    border-radius: 12px;
+    background: #fff;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.modal-buttons .snooze-btn {
+    background: #B8FF9F;
+}
+
+.modal-buttons button:hover {
+    transform: translateY(-2px);
+}
+
+.volume-slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 4px;
+    border-radius: 2px;
+    background: #000;
+    outline: none;
+}
+
+.volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #B8FF9F;
+    border: 2px solid #000;
+    cursor: pointer;
+}
+
+.volume-slider::-webkit-slider-thumb:hover {
+    background: #9FE889;
+}
+
+@media (max-width: 900px) {
+    .container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .panel {
+        width: 100%;
+    }
+}
+
+@font-face {
+    font-family: 'Press Start 2P';
+    src: url('https://fonts.gstatic.com/s/pressstart2p/v14/e3t4euO8T-267oIAQAu6jDQyK3nVivM.woff2') format('woff2');
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    image-rendering: pixelated;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+body {
+    min-height: 100vh;
+    background: white;
+    font-family: 'Press Start 2P', monospace;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    touch-action: manipulation;
+}
+
+.title {
+    font-size: 18px;
+    margin: 1rem 0;
+    text-align: center;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.panel {
+    padding: 1.5rem;
+    border-radius: 16px;
+    border: 3px solid #000;
+    width: 100%;
+}
+
+.timer-panel {
+    background: linear-gradient(180deg, #B8FF9F 0%, #ffffff 100%);
+}
+
+.task-panel {
+    background: linear-gradient(180deg, #FFB8E8 0%, #ffffff 100%);
+}
+
+.panel-label {
+    font-size: 14px;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+/* Timer specific styles */
+.timer-circle {
+    width: 180px;
+    height: 180px;
+    margin: 1.5rem auto;
+}
+
+.timer-circle .time {
+    font-size: 24px;
+}
+
+.mode-selector {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+    margin: 1rem 0;
+}
+
+.mode-selector button {
+    padding: 12px 8px;
+    font-size: 10px;
+    min-height: 44px;
+    touch-action: manipulation;
+}
+
+.timer-controls {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+}
+
+.timer-controls button {
+    padding: 12px 8px;
+    font-size: 12px;
+    min-height: 44px;
+    touch-action: manipulation;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: #fff;
+    border: 2px solid #000;
+    border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #B8FF9F;
+    border: 2px solid #000;
+    border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #9FE889;
+}
+
+/* Custom Checkbox */
+input[type="checkbox"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 24px;
+    height: 24px;
+    border: 3px solid #000;
+    border-radius: 4px;
+    background: #fff;
+    cursor: pointer;
+    position: relative;
+    margin: 0;
+}
+
+input[type="checkbox"]:checked {
+    background: #B8FF9F;
+}
+
+input[type="checkbox"]:checked::after {
+    content: "";
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
+    width: 6px;
+    height: 12px;
+    border: solid #000;
+    border-width: 0 3px 3px 0;
+}
+
+input[type="checkbox"]:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(184, 255, 159, 0.5);
+}
+
+/* For mobile devices */
+@media (hover: none) {
+    input[type="checkbox"] {
+        width: 28px;
+        height: 28px;
+    }
+
+    input[type="checkbox"]:checked::after {
+        width: 8px;
+        height: 14px;
+    }
+}
+
+/* Allow selection in input fields */
+input[type="text"],
+input[type="number"] {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+}
+
+/* Prevent right-click menu */
+body {
+    -webkit-touch-callout: none;
+    -webkit-context-menu: none;
+    -ms-context-menu: none;
+    context-menu: none;
+}
+
+/* Task specific styles */
+.task-input {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.5rem;
+    margin: 1rem 0;
+}
+
+.task-input input {
+    padding: 12px;
+    font-size: 12px;
+    min-height: 44px;
+}
+
+.task-input button {
+    padding: 12px 16px;
+    font-size: 12px;
+    min-height: 44px;
+}
+
+.task-list {
+    max-height: 250px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 0.5rem;
+}
+
+.task-item {
+    padding: 12px;
+    margin-bottom: 0.5rem;
+    min-height: 44px;
+}
+
+.task-item input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+}
+
+/* Settings panel adjustments */
+.settings-icon {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    width: 44px;
+    height: 44px;
+    font-size: 20px;
+}
+
+.settings-panel {
+    width: 90%;
+    max-width: 400px;
+    padding: 1rem;
+}
+
+.setting-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.setting-item input[type="number"],
+.setting-item input[type="checkbox"] {
+    min-height: 44px;
+    min-width: 44px;
+}
+
+/* Snooze modal adjustments */
+.modal-content {
+    width: 90%;
+    max-width: 320px;
+    padding: 1.5rem;
+}
+
+.modal-buttons {
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.modal-buttons button {
+    width: 100%;
+    min-height: 44px;
+    padding: 12px;
+}
+
+/* Media query for larger screens */
+@media (min-width: 768px) {
+    .container {
+        flex-direction: row;
+        gap: 2rem;
+    }
+
+    .panel {
+        flex: 1;
+    }
+
+    .modal-buttons {
+        flex-direction: row;
+    }
+
+    .setting-item {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+}
+
+/* Remove desktop-specific elements */
+.window-controls,
+.border-pattern {
+    display: none;
+}

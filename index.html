@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#B8FF9F">
+    <link rel="apple-touch-icon" href="icons/icon.png">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>Pixel Pomodoro Timer</title>
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+    <h1 class="title">POMODORO TIMER</h1>
+
+    <div class="container">
+        <div class="panel timer-panel">
+            <div class="panel-label">TIMER</div>
+            <div class="mode-selector">
+                <button class="active" data-mode="pomodoro" data-time="25">FOCUS</button>
+                <button data-mode="shortBreak" data-time="5">SHORT</button>
+                <button data-mode="longBreak" data-time="15">LONG</button>
+            </div>
+            
+            <div class="timer-circle">
+                <svg class="progress-ring" viewBox="0 0 200 200">
+                    <circle class="background" cx="100" cy="100" r="90"/>
+                    <circle class="progress" cx="100" cy="100" r="90"/>
+                </svg>
+                <span class="time">25:00</span>
+            </div>
+
+            <div class="timer-status">READY TO START</div>
+            <div class="session-count">SESSIONS: 0</div>
+
+            <div class="timer-controls">
+                <button id="startButton">START</button>
+                <button id="pauseButton" disabled>PAUSE</button>
+                <button id="resetButton">RESET</button>
+            </div>
+        </div>
+
+        <div class="panel task-panel">
+            <div class="panel-label">TASK</div>
+            <div class="task-input">
+                <input type="text" placeholder="New task..." aria-label="New task">
+                <button aria-label="Add task">ADD</button>
+            </div>
+            <div class="task-list" role="list">
+                <!-- Tasks will be added here -->
+            </div>
+        </div>
+    </div>
+
+    <div class="settings-icon" role="button" aria-label="Settings">⚙</div>
+
+    <div class="settings-panel" role="dialog" aria-label="Settings">
+        <div class="panel-header">
+            <h2>Settings</h2>
+            <button class="close-settings" aria-label="Close settings">×</button>
+        </div>
+        
+        <div class="settings-section">
+            <h3>Timer Settings</h3>
+            <div class="setting-item">
+                <label for="focusTime">Focus Time (minutes)</label>
+                <input type="number" id="focusTime" min="1" max="120" value="25">
+            </div>
+            <div class="setting-item">
+                <label for="shortBreakTime">Short Break (minutes)</label>
+                <input type="number" id="shortBreakTime" min="1" max="30" value="5">
+            </div>
+            <div class="setting-item">
+                <label for="longBreakTime">Long Break (minutes)</label>
+                <input type="number" id="longBreakTime" min="1" max="60" value="15">
+            </div>
+        </div>
+    
+        <div class="settings-section">
+            <h3>Auto-Start Timers</h3>
+            <div class="setting-item">
+                <label for="autoStartBreaks">Auto-start breaks</label>
+                <input type="checkbox" id="autoStartBreaks">
+            </div>
+            <div class="setting-item">
+                <label for="autoStartPomodoros">Auto-start pomodoros</label>
+                <input type="checkbox" id="autoStartPomodoros">
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <h3>Sound Settings</h3>
+            <div class="setting-item">
+                <label for="volumeSlider">Timer Sound Volume</label>
+                <input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="0.5" class="volume-slider">
+            </div>
+        </div>
+    
+        <button class="save-settings">Save Settings</button>
+    </div>
+
+    <audio id="timerComplete" src="assets/music/popstep.mp3" loop></audio>
+
+    <div class="snooze-modal" role="dialog" aria-label="Timer Complete">
+        <div class="modal-content">
+            <h2>Timer Complete!</h2>
+            <div class="modal-buttons">
+                <button class="snooze-btn">Snooze 5min</button>
+                <button class="dismiss-btn">Dismiss</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(registration => {
+                        console.log('ServiceWorker registration successful');
+                    })
+                    .catch(err => {
+                        console.log('ServiceWorker registration failed: ', err);
+                    });
+            });
+        }
+    </script>
+</body>
+</html>
